@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.wso2.client.api.DCRC_CitizenDetailsAPI.DefaultApi;
 import org.wso2.client.model.DCRC_CitizenDetailsAPI.CitizenDetailsResponse;
 import org.wso2.client.model.DCRC_CitizenDetailsAPI.CitizendetailsObj;
-import org.wso2.client.model.G2C_CommonBusinessAPI.UserRolePrivilegeHierarchyObj;
-import org.wso2.client.model.G2C_CommonBusinessAPI.UserRolePrivilegeHierarchyResponse;
 
 import com.squareup.okhttp.OkHttpClient;
 
@@ -83,43 +81,5 @@ public class FarmerDetailsCensusController {
         return farmerDetailCensus;
 
 	}
-	
-	@ResponseBody
-    @RequestMapping(value="/userLogin/{uid}",method = RequestMethod.GET)
-	public UserRolePrivilegeHierarchyObj userLogin(@PathVariable("uid") String uid,HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserRolePrivilegeHierarchyObj userRolePrivilegeObj = null;
-          
-
-         
-            OkHttpClient httpClient = new OkHttpClient();
-            httpClient.setConnectTimeout(10000, TimeUnit.MILLISECONDS);
-            httpClient.setReadTimeout(10000, TimeUnit.MILLISECONDS);
-
-            org.wso2.client.api.ApiClient apiClient = new org.wso2.client.api.ApiClient();
-            apiClient.setHttpClient(httpClient);
-            apiClient.setBasePath("https://staging-datahub-apim.dit.gov.bt/g2c_common_business_api/1.0.0");
-
-            // HttpSession session = request.getSession();
-            //TokenDTO tokendto = (TokenDTO) session.getAttribute("TOKEN");
-            apiClient.setAccessToken("1a1e7391-07c4-3763-b4eb-2c30c810d80d");
-
-            try{
-            	org.wso2.client.api.G2C_CommonBusinessAPI.DefaultApi api = new org.wso2.client.api.G2C_CommonBusinessAPI.DefaultApi(apiClient);
-                UserRolePrivilegeHierarchyResponse userRolePrivilegeResponse = api.userroleprivilegehierarchyUseridDeptshortcodeGet(uid, "M_MOA.D_DOL");
-                
-
-                if (userRolePrivilegeResponse.getUserRolePrivilegeHierarchyResponse().getUserRolePrivilegeHierarchy() != null
-                        && !userRolePrivilegeResponse.getUserRolePrivilegeHierarchyResponse().getUserRolePrivilegeHierarchy().isEmpty()) {
-                    userRolePrivilegeObj = userRolePrivilegeResponse.getUserRolePrivilegeHierarchyResponse().getUserRolePrivilegeHierarchy().get(0);
-
-                }
-            }
-            catch(Exception e) {
-            	e.printStackTrace();
-            }
-            
-            return userRolePrivilegeObj;
-	}
-	
 	
 }
